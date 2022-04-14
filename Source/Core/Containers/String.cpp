@@ -1,5 +1,6 @@
 #include "String.h"
 #include "Core/Utils/Allocator.h"
+#include <stdio.h>
 
 #include <string.h>
 #include <memory.h>
@@ -321,7 +322,7 @@ void String::Set(const double value)
 	{
 		while (v >= 1.0 || exponent >= 0)
 		{
-			power = pow(10, (float)exponent);
+			power = pow(10, double(exponent));
 			digit = char(floor(v / power));
 			v -= digit * power;
 			PushBack(digit + '0');
@@ -331,7 +332,7 @@ void String::Set(const double value)
 	PushBack('.');
 	while (after > 0)
 	{
-		v *= 10;
+		v *= 10.0;
 		PushBack(char(v) + '0');
 		v -= char(v);
 		--after;
@@ -346,6 +347,64 @@ void String::Set(const float value)
 void String::Set(const bool value)
 {
 	Set(value ? "true" : "false");
+}
+
+void String::AppendFormatArgs(const char* fmt, va_list args)
+{
+	const char* format = fmt;
+	char currentFormat = 0;
+	while (*format)
+	{
+		if (*format != '%')
+		{
+			PushBack(*format);
+		}
+		else
+		{
+			currentFormat = *(format + 1);
+			if (currentFormat == 's')
+			{
+				char* arg = va_arg(args, char*);
+				*this += arg;
+			}
+			if (currentFormat == 'c')
+			{
+				char arg = va_arg(args, char);
+				*this += arg;
+			}
+			if (currentFormat == 'i')
+			{
+				int arg = va_arg(args, int);
+				*this += arg;
+			}
+			if (currentFormat == 'u' && *(format + 2) == 'i')
+			{
+				UInt arg = va_arg(args, UInt);
+				*this += arg;
+				++format;
+			}
+			if (currentFormat == 'f')
+			{
+				double arg = va_arg(args, double);
+				*this += arg;
+			}
+			if (currentFormat == 'b')
+			{
+				bool arg = va_arg(args, bool);
+				*this += arg;
+			}
+			++format;
+		}
+		++format;
+	}
+}
+
+void String::AppendFormat(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	AppendFormatArgs(fmt, args);
+	va_end(args);
 }
 
 void String::Resize(UInt64 size)

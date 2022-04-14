@@ -1,5 +1,7 @@
 #include "Core/Core/BasicTypes.h"
 
+#include <stdarg.h>
+
 class String
 {
 public:
@@ -51,6 +53,8 @@ public:
 	void Set(const double value);
 	void Set(const float value);
 	void Set(const bool value);
+	void AppendFormatArgs(const char* fmt, va_list args);
+	void AppendFormat(const char* fmt, ...);
 	void Resize(UInt64 size);
 	void Add(UInt64 size, const char* data);
 	void PushBack(const char value);
