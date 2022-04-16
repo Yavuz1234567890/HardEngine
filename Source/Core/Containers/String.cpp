@@ -1,10 +1,55 @@
 #include "String.h"
 #include "Core/Utils/Allocator.h"
-#include <stdio.h>
 
 #include <string.h>
 #include <memory.h>
 #include <math.h>
+
+namespace WString
+{
+	String FromWString(const WChar* source)
+	{
+		String d;
+		const WChar* s = source;
+		while (*s)
+		{
+			d += (char)*s;
+			++s;
+		}
+		return d;
+	}
+
+	class WStrData
+	{
+	public:
+		WStrData()
+			: Data(nullptr)
+		{
+
+		}
+
+		WStrData(const char* data)
+		{
+			const char* source = data;
+			const UInt64 size = strlen(data);
+			Data = (WChar*)Allocator::Alloc(size + 1);
+			while (*source)
+			{
+				*Data = (WChar)*source;
+				++source;
+				++Data;
+			}
+			Data[size] = 0;
+		}
+
+		~WStrData()
+		{
+			Data[0] = 0;
+		}
+
+		WChar* Data;
+	};
+}
 
 String::String()
 	: m_Data(nullptr),
@@ -18,7 +63,17 @@ String::String(UInt64 size, const char* data)
 	Set(size, data);
 }
 
+String::String(UInt64 size, const WChar* data)
+{
+	Set(size, data);
+}
+
 String::String(const char* data)
+{
+	Set(data);
+}
+
+String::String(const WChar* data)
 {
 	Set(data);
 }
@@ -34,6 +89,11 @@ String::String(String&& rhs)
 }
 
 String::String(const char value)
+{
+	Set(value);
+}
+
+String::String(const WChar value)
 {
 	Set(value);
 }
@@ -65,10 +125,16 @@ String::String(const bool value)
 
 String::~String()
 {
-	Clear();
+
 }
 
 String& String::operator=(const char* data)
+{
+	Set(data);
+	return *this;
+}
+
+String& String::operator=(const WChar* data)
 {
 	Set(data);
 	return *this;
@@ -87,6 +153,12 @@ String& String::operator=(String&& rhs)
 }
 
 String& String::operator=(const char value)
+{
+	Set(value);
+	return *this;
+}
+
+String& String::operator=(const WChar value)
 {
 	Set(value);
 	return *this;
@@ -128,6 +200,12 @@ String& String::operator+=(const char* data)
 	return *this;
 }
 
+String& String::operator+=(const WChar* data)
+{
+	*this += String(data);
+	return *this;
+}
+
 String& String::operator+=(const String& rhs)
 {
 	Add(rhs.m_Size, rhs.m_Data);
@@ -137,6 +215,12 @@ String& String::operator+=(const String& rhs)
 String& String::operator+=(const char value)
 {
 	PushBack(value);
+	return *this;
+}
+
+String& String::operator+=(const WChar value)
+{
+	*this += String(value);
 	return *this;
 }
 
@@ -205,7 +289,7 @@ int String::Compare(const String& rhs) const
 	return strcmp(m_Data, rhs.m_Data);
 }
 
-String String::SubString(UInt64 begin, UInt64 end)
+String String::SubString(UInt64 begin, UInt64 end) const
 {
 	return String(end, m_Data + begin);
 }
@@ -227,9 +311,19 @@ void String::Set(UInt64 size, const char* data)
 	m_Size = size;
 }
 
+void String::Set(UInt64 size, const WChar* data)
+{
+	Set(size, WString::FromWString(data).CData());
+}
+
 void String::Set(const char* data)
 {
 	Set(strlen(data), data);
+}
+
+void String::Set(const WChar* data)
+{
+	Set(WString::FromWString(data));
 }
 
 void String::Set(const String& rhs)
@@ -251,6 +345,14 @@ void String::Swap(String& rhs)
 void String::Set(const char value)
 {
 	char* buffer = (char*)Allocator::Alloc(2);
+	buffer[0] = value;
+	buffer[1] = 0;
+	Set(1, buffer);
+}
+
+void String::Set(const WChar value)
+{
+	WChar* buffer = (WChar*)Allocator::Alloc(2);
 	buffer[0] = value;
 	buffer[1] = 0;
 	Set(1, buffer);
@@ -300,6 +402,12 @@ void String::Set(const UInt value)
 		}
 		Reverse();
 	}
+}
+
+String& String::PushBack(const String& rhs)
+{
+	*this += rhs;
+	return *this;
 }
 
 void String::Set(const double value)
@@ -352,7 +460,7 @@ void String::Set(const bool value)
 void String::AppendFormatArgs(const char* fmt, va_list args)
 {
 	const char* format = fmt;
-	char currentFormat = 0;
+	char currentFormat = 0, secondFormat = 0;
 	while (*format)
 	{
 		if (*format != '%')
@@ -362,6 +470,7 @@ void String::AppendFormatArgs(const char* fmt, va_list args)
 		else
 		{
 			currentFormat = *(format + 1);
+			secondFormat = *(format + 2);
 			if (currentFormat == 's')
 			{
 				char* arg = va_arg(args, char*);
@@ -377,7 +486,7 @@ void String::AppendFormatArgs(const char* fmt, va_list args)
 				int arg = va_arg(args, int);
 				*this += arg;
 			}
-			if (currentFormat == 'u' && *(format + 2) == 'i')
+			if (currentFormat == 'u' && secondFormat == 'i')
 			{
 				UInt arg = va_arg(args, UInt);
 				*this += arg;
@@ -392,6 +501,20 @@ void String::AppendFormatArgs(const char* fmt, va_list args)
 			{
 				bool arg = va_arg(args, bool);
 				*this += arg;
+			}
+			if (currentFormat == 'w')
+			{
+				if (secondFormat == 's')
+				{
+					WChar* arg = va_arg(args, WChar*);
+					*this += arg;
+				}
+				if (secondFormat == 'c')
+				{
+					WChar arg = va_arg(args, WChar);
+					*this += arg;
+				}
+				++format;
 			}
 			++format;
 		}
@@ -491,6 +614,12 @@ bool String::IsEmpty() const
 const char* String::CData() const
 {
 	return m_Data;
+}
+
+const WChar* String::WData() const
+{
+	WString::WStrData wstr(m_Data);
+	return wstr.Data;
 }
 
 char* String::Data()

@@ -7,3 +7,4 @@ typedef signed char Int8;
 typedef signed short Int16;
 typedef signed int Int32;
 typedef long long Int64;
+typedef wchar_t WChar;

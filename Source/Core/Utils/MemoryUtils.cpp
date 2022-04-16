@@ -5,7 +5,7 @@ UInt64 MemoryUtils::s_UsedBytes = 0;
 UInt MemoryUtils::s_TotalAllocated = 0;
 UInt MemoryUtils::s_TotalFreed = 0;
 
-void MemoryUtils::AddAllocation(size_t size)
+void MemoryUtils::AddAllocation(UInt64 size)
 {
 	++s_TotalAllocated;
 	s_TotalUsed += size;

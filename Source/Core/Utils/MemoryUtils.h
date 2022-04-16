@@ -3,7 +3,7 @@
 class MemoryUtils
 {
 public:
-	static void AddAllocation(size_t size);
+	static void AddAllocation(UInt64 size);
 	static void AddDeallocation(void* block);
 
 	static UInt64 GetTotalUsed();

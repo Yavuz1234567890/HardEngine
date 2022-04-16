@@ -35,7 +35,7 @@ public:
 
 	~Vector()
 	{
-		Clear();
+		// Clear();
 	}
 
 	Vector& operator=(const Vector& rhs)
@@ -115,7 +115,10 @@ public:
 
 	void PushBack(const T& value)
 	{
-		if (m_Size == m_Capacity)ResizeGrow();
+		if (m_Size == m_Capacity)
+		{
+			ResizeGrow();
+		}
 		new (m_Data + m_Size) T(value);
 		++m_Size;
 	}
@@ -207,6 +210,11 @@ public:
 	bool IsEmpty() const
 	{
 		return m_Size == 0;
+	}
+
+	const T* Data() const
+	{
+		return m_Data;
 	}
 
 	T* Data()

@@ -6,14 +6,14 @@
 
 #define MEM_ALIGN 16
 
-void* Allocator::Alloc(size_t size)
+void* Allocator::Alloc(UInt64 size)
 {
 	MemoryUtils::AddAllocation(size);
 	char* buffer = (char*)malloc(size + MEM_ALIGN);
 	return buffer + MEM_ALIGN;
 }
 
-void* Allocator::Realloc(void* block, size_t size)
+void* Allocator::Realloc(void* block, UInt64 size)
 {
 	MemoryUtils::AddAllocation(size);
 	void* buffer = Alloc(size);
