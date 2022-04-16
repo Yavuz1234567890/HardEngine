@@ -13,14 +13,17 @@ void Debug::LogFn(const int level, const char* out)
 	if (level == Log::INFO)
 	{
 		SetColor(GREEN);
+		Print("[Info] ");
 	}
 	if (level == Log::ERR)
 	{
 		SetColor(RED);
+		Print("[Error] ");
 	}
 	if (level == Log::WARNING)
 	{
 		SetColor(YELLOW);
+		Print("[Warning] ");
 	}
 	Print(out);
 	Print("\n");

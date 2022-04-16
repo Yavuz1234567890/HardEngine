@@ -9,17 +9,13 @@
 void* Allocator::Alloc(UInt64 size)
 {
 	MemoryUtils::AddAllocation(size);
-	char* buffer = (char*)malloc(size + MEM_ALIGN);
-	return buffer + MEM_ALIGN;
+	return _aligned_malloc(size, MEM_ALIGN);
 }
 
 void* Allocator::Realloc(void* block, UInt64 size)
 {
 	MemoryUtils::AddAllocation(size);
-	void* buffer = Alloc(size);
-	memcpy(buffer, block, size);
-	Free(block);
-	return buffer;
+	return _aligned_realloc(block, size, MEM_ALIGN);
 }
 
 void Allocator::Free(void* block)
@@ -27,6 +23,6 @@ void Allocator::Free(void* block)
 	if (block)
 	{
 		MemoryUtils::AddDeallocation(block);
-		free((char*)block - MEM_ALIGN);
+		_aligned_free(block);
 	}
 }
