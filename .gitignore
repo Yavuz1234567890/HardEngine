@@ -6,4 +6,4 @@
 .vscode/
 Output/
 Object/
-
+*.log.txt

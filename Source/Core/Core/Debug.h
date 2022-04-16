@@ -16,6 +16,7 @@ public:
 	static void Print(const char* out);
 	static void SetColor(const int color);
 	static void Break();
+	static void LogFn(const int level, const char* out);
 private:
 #if defined(HA_PLATFORM_WINDOWS)
 	static void* s_ConsoleHandle;

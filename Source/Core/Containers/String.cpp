@@ -353,7 +353,7 @@ void String::Set(const char value)
 void String::Set(const WChar value)
 {
 	WChar* buffer = (WChar*)Allocator::Alloc(2);
-	buffer[0] = value;
+	buffer[0] = (char)value;
 	buffer[1] = 0;
 	Set(1, buffer);
 }
