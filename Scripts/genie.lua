@@ -52,7 +52,11 @@ solution "HardEngine"
 		"NoRTTI", 
 		"NoEditAndContinue"
 	}
-	includedirs { "../Source" }
+	includedirs 
+	{ 
+		"../Source",
+		"../Dependencies/stb"
+	}
 	configurations { "Debug", "RelWithDebInfo" }
 	platforms { "x64" }
 	language "C++"
@@ -74,7 +78,10 @@ solution "HardEngine"
 		files 
 		{
 			"../Source/Core/**.cpp",
-			"../Source/Core/**.h"
+			"../Source/Core/**.h",
+
+			"../Dependencies/stb/stb.cpp",
+			"../Dependencies/stb/stb_image.h"
 		}
 		UseConfigurations()
 		UseOpenGL()
