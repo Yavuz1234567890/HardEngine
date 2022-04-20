@@ -1,3 +1,6 @@
+#ifndef FILE_H_
+#define FILE_H_
+
 #include "Core/Core/BasicTypes.h"
 
 class File
@@ -28,3 +31,5 @@ private:
 
 	void* m_Handle;
 };
+
+#endif

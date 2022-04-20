@@ -1,3 +1,6 @@
+#ifndef DEBUG_H_
+#define DEBUG_H_
+
 #include "BasicTypes.h"
 #include "PlatformDetection.h"
 
@@ -22,3 +25,5 @@ private:
 	static void* s_ConsoleHandle;
 #endif
 };
+
+#endif

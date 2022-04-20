@@ -1,3 +1,6 @@
+#ifndef FILE_SYSTEM_H_
+#define FILE_SYSTEM_H_
+
 #include "Path.h"
 #include "Core/Containers/Vector.h"
 
@@ -15,3 +18,5 @@ public:
 	static void ChangeCurrentDir(const String& path);
 	static String GetCurrentDir();
 };
+
+#endif

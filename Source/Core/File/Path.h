@@ -1,3 +1,6 @@
+#ifndef PATH_H_
+#define PATH_H_
+
 #include "Core/Containers/String.h"
 
 class Path
@@ -10,3 +13,5 @@ public:
 	static void ClearDirectory(String& path);
 	static String MakePath(const String& path);
 };
+
+#endif

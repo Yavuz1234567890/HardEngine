@@ -1,3 +1,6 @@
+#ifndef ALLOCATOR_H_
+#define ALLOCATOR_H_
+
 #include "Core/Core/BasicTypes.h"
 
 #include <new.h>
@@ -14,7 +17,7 @@ public:
 	{
 		T* buffer = (T*)Alloc(sizeof(T));
 		new (buffer) T(static_cast<Args&&>(args)...);
-		return bufffer;
+		return buffer;
 	}
 
 	template<typename T>
@@ -23,3 +26,5 @@ public:
 		Free(memory);
 	}
 };
+
+#endif

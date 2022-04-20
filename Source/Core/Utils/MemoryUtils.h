@@ -1,3 +1,6 @@
+#ifndef MEMORY_UTILS_H_
+#define MEMORY_UTILS_H_
+
 #include "Core/Core/BasicTypes.h"
 
 class MemoryUtils
@@ -16,3 +19,5 @@ private:
 	static UInt s_TotalAllocated;
 	static UInt s_TotalFreed;
 };
+
+#endif

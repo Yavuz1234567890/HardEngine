@@ -1,3 +1,6 @@
+#ifndef PAIR_H_
+#define PAIR_H_
+
 template<typename K, typename V>
 class Pair
 {
@@ -70,3 +73,5 @@ private:
 		rhs.Value = value;
 	}
 };
+
+#endif

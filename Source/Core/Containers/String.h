@@ -1,3 +1,6 @@
+#ifndef STRING_H_
+#define STRING_H_
+
 #include "Core/Core/BasicTypes.h"
 
 #include <stdarg.h>
@@ -78,10 +81,17 @@ public:
 	bool EndsWith(const String& end);
 	bool IsEmpty() const;
 	const char* CData() const;
-	const WChar* WData() const;
 	char* Data();
 	UInt64 Size() const;
 private:
 	char* m_Data;
 	UInt64 m_Size;
 };
+
+namespace WString
+{
+	String FromWString(const WChar* source);
+	void ToCString(WChar* in, const char* out);
+}
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef IMAGE_H_
+#define IMAGE_H_
+
 #include "Core/Core/BasicTypes.h"
 #include "Core/File/FileSystem.h"
 
@@ -17,3 +20,5 @@ private:
 	int m_Width, m_Height;
 	int m_Channels;
 };
+
+#endif

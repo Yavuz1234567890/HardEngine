@@ -1,3 +1,6 @@
+#ifndef TIME_H_
+#define TIME_H_
+
 #include "Core/Core/BasicTypes.h"
 
 struct SystemTime
@@ -20,3 +23,5 @@ public:
     static void Sleep(UInt milliseconds);
     static void GetSystemTime(SystemTime* in);
 };
+
+#endif

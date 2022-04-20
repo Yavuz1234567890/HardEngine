@@ -1,3 +1,6 @@
+#ifndef MUTEX_H_
+#define MUTEX_H_
+
 #include "Core/Core/BasicTypes.h"
 #include "Core/Core/PlatformDetection.h"
 
@@ -20,3 +23,5 @@ private:
 	pthread_mutex_t m_Base;
 #endif
 };
+
+#endif

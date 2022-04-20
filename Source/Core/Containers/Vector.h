@@ -1,3 +1,6 @@
+#ifndef VECTOR_H_
+#define VECTOR_H_
+
 #include "Core/Core/BasicTypes.h"
 #include "Core/Utils/Allocator.h"
 
@@ -244,3 +247,5 @@ private:
 	T* m_Data;
 	UInt64 m_Size, m_Capacity;
 };
+
+#endif

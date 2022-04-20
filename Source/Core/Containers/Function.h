@@ -1,3 +1,6 @@
+#ifndef FUNCTION_H_
+#define FUNCTION_H_
+
 template <typename T> class Function;
 
 template<typename R, typename... Args>
@@ -29,6 +32,13 @@ public:
 
 	}
 
+	Function(const Function& rhs)
+		: m_Instance(rhs.m_Instance),
+		m_Handle(rhs.m_Handle)
+	{
+
+	}
+
 	template <typename T>
 	Function(const T& value)
 	{
@@ -38,6 +48,13 @@ public:
 			const T& function = *(const T*)instance;
 			return function(args...);
 		};
+	}
+
+	Function& operator=(const Function& rhs)
+	{
+		m_Instance = rhs.m_Instance;
+		m_Handle = rhs.m_Handle;
+		return *this;
 	}
 
 	R operator()(Args... args) const
@@ -62,3 +79,5 @@ private:
 	R(*m_Handle)(void*, Args...);
 	void* m_Instance;
 };
+
+#endif

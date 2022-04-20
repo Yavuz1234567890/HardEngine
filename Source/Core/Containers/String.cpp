@@ -19,36 +19,18 @@ namespace WString
 		return d;
 	}
 
-	class WStrData
+	void ToCString(WChar* in, const char* out)
 	{
-	public:
-		WStrData()
-			: Data(nullptr)
+		const char* cout = out;
+		WChar* cin = in;
+		while (*cout)
 		{
-
+			*cin = (WChar)*cout;
+			++cout;
+			++cin;
 		}
-
-		WStrData(const char* data)
-		{
-			const char* source = data;
-			const UInt64 size = strlen(data);
-			Data = (WChar*)Allocator::Alloc(size + 1);
-			while (*source)
-			{
-				*Data = (WChar)*source;
-				++source;
-				++Data;
-			}
-			Data[size] = 0;
-		}
-
-		~WStrData()
-		{
-			Data[0] = 0;
-		}
-
-		WChar* Data;
-	};
+		*cin = 0;
+	}
 }
 
 String::String()
@@ -614,12 +596,6 @@ bool String::IsEmpty() const
 const char* String::CData() const
 {
 	return m_Data;
-}
-
-const WChar* String::WData() const
-{
-	WString::WStrData wstr(m_Data);
-	return wstr.Data;
 }
 
 char* String::Data()
