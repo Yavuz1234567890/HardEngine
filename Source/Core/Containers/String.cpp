@@ -208,25 +208,33 @@ String& String::operator+=(const WChar value)
 
 String& String::operator+=(const int value)
 {
-	*this += String(value);
+	String str;
+	str = value;
+	*this += str;
 	return *this;
 }
 
 String& String::operator+=(const UInt value)
 {
-	*this += String(value);
+	String str;
+	str = value;
+	*this += str;
 	return *this;
 }
 
 String& String::operator+=(const double value)
 {
-	*this += String(value);
+	String str;
+	str = value;
+	*this += str;
 	return *this;
 }
 
 String& String::operator+=(const float value)
 {
-	*this += String(value);
+	String str;
+	str = value;
+	*this += str;
 	return *this;
 }
 
@@ -516,8 +524,14 @@ void String::Resize(UInt64 size)
 {
 	if (m_Size != size)
 	{
-		if (m_Size == 0)m_Data = (char*)Allocator::Alloc(size + 1);
-		else m_Data = (char*)Allocator::Realloc(m_Data, size + 1);
+		if (m_Size == 0)
+		{
+			m_Data = (char*)Allocator::Alloc(size + 1);
+		}
+		else
+		{
+			m_Data = (char*)Allocator::Realloc(m_Data, size + 1);
+		}
 		m_Size = size;
 	}
 	m_Data[size] = 0;
